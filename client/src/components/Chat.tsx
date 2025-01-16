@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Socket } from "socket.io-client";
 import ScrollToBottom from "react-scroll-to-bottom";
 
@@ -21,7 +21,13 @@ interface Message {
 const Chat = ({ socket, username, room }: Props) => {
   const [currentMessage, setCurrentMessage] = useState("");
   const [messageList, setMessageList] = useState<Message[]>([]);
+  const messagesEndRef = useRef<HTMLDivElement>(null);
 
+  useEffect(() => {
+    if (messagesEndRef.current) {
+      messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+    }
+  },[messageList]);
   const sendMessage = async () => {
     if (currentMessage !== "") {
       const now = new Date();
@@ -60,9 +66,8 @@ const Chat = ({ socket, username, room }: Props) => {
         <p>Room: {room}</p>
       </div>
       <div className="bg-transparent h-[70vh]">
-        <ScrollToBottom
+        <div
           className="w-full h-full overflow-x-hidden overflow-y-scroll no-scrollbar"
-          scrollViewClassName="flex flex-col"
         >
           {messageList.map((message, index) => {
             return (
@@ -80,7 +85,9 @@ const Chat = ({ socket, username, room }: Props) => {
               </div>
             );
           })}
-        </ScrollToBottom>
+        <div ref={messagesEndRef} />
+        </div>
+        
       </div>
       <div className="flex flex-row justify-between items-center bg-slate-900 p-2 overflow-hidden rounded-md space-x-2">
         <input

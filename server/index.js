@@ -4,7 +4,7 @@ const cors = require("cors");
 const { Server } = require("socket.io");
 
 const PORT = process.env.PORT || 3001;
-const CORS_ORIGIN = process.env.CORS_ORIGIN || "http://localhost:5173";
+const CORS_ORIGIN = process.env.CORS_ORIGIN || "https://urban-chainsaw-jj9r7qq44r6fqp47-5173.app.github.dev";
 
 const app = express();
 app.use(cors());
